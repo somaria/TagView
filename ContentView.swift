@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
    
-   @State private var tags: [String] = ["SwiftUI And Apple Developer", "Swift", "iOS", "Apple", "WWDC", "React", "Flutter", "App", "Indie", "Developer", "Objc", "C#", "C", "C++", "iPhone", "iPad", "MacBook", "iPadOS", "macOS"]
+   @State private var tags: [String] = ["My", "name", "is", "Michael", "School", "Park", "Tomorrow", "How"]
    
    @State private var selectedTags: [String] = []
    
@@ -17,10 +17,11 @@ struct ContentView: View {
    
     var body: some View {
        VStack(spacing: 0) {
-          ScrollView(.horizontal) {
-             HStack(spacing: 12) {
+          VStack {
+             Text("My name is Michael")
+             TagLayout(alignment: .leading, spacing: 10) {
                 ForEach(selectedTags, id:\.self) { tag in
-                   TagView(tag, .pink, "checkmark")
+                   TagView(tag, .pink, "")
                       .matchedGeometryEffect(id: tag, in: animation)
                       .onTapGesture {
                          withAnimation(.snappy) {
@@ -30,41 +31,33 @@ struct ContentView: View {
                 }
              }
              .padding(.horizontal, 15)
-             .frame(height: 35)
              .padding(.vertical)
-          }
-          .scrollClipDisabled(true)
-          .scrollIndicators(.hidden)
-          .overlay {
+             .padding(.bottom, 24)
+             .overlay {
              if selectedTags.isEmpty {
                 Text("Select more than 3 tags")
                    .font(.callout)
                    .foregroundStyle(.gray)
+               }
              }
+             Spacer()
+                .frame(height: 320)
           }
           .background(.white)
-          .zIndex(1)
-          
-          ScrollView(.vertical) {
-             
              TagLayout(alignment: .leading, spacing: 10) {
                 ForEach(tags.filter { !selectedTags.contains($0)}, id: \.self) { tag in
                    TagView(tag, .blue, "plus")
                       .matchedGeometryEffect(id: tag, in: animation)
                       .onTapGesture {
                          withAnimation(.snappy) {
-                            selectedTags.insert(tag, at: 0)
+                            selectedTags.append(tag)
                          }
                       }
                 }
              }
              .padding(15)
-             
-          }
-          .scrollClipDisabled(true)
-          .scrollIndicators(.hidden)
+
           .background(.black.opacity(0.05))
-          .zIndex(0)
           
           ZStack {
              Button(action: {}) {
@@ -82,7 +75,6 @@ struct ContentView: View {
              .opacity(selectedTags.count < 3 ? 0.5 : 1)
              .padding()
           }
-          .zIndex(2)
           .background(.white)
           
         }
@@ -96,7 +88,10 @@ struct ContentView: View {
             .font(.callout)
             .fontWeight(.semibold)
          
-         Image(systemName: icon)
+         
+            icon != "" ? Image(systemName: icon) : nil
+         
+         
       }
       .frame(height: 35)
       .foregroundStyle(.white)
